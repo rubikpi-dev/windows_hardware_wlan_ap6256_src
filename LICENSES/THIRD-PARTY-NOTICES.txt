@@ -1,0 +1,129 @@
+Third-party source notices
+
+Project-authored portions are BSD-3-Clause; see BSD-3-Clause.txt.
+
+Broadcom ISC portions
+
+AP6256/common/chip.c
+SPDX-License-Identifier: ISC
+DmpGetDesc, DmpGetRegAddr, ChipEromScan and ChipTcmRamSize are adapted from
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c in Linux:
+https://github.com/torvalds/linux
+Upstream commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
+Copyright (c) 2014 Broadcom Corporation
+
+The following ISC notice applies to those Linux-derived portions only.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
+OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+AP6256/common/chip.h
+SPDX-License-Identifier: ISC
+DMP descriptor and wrapper definitions are derived from
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/chip.c in Linux:
+https://github.com/torvalds/linux
+Upstream commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
+Copyright (c) 2014 Broadcom Corporation
+
+The following ISC notice applies to those Linux-derived definitions only.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
+OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+AP6256/common/chipregs.h
+SPDX-License-Identifier: ISC
+Register and bit definitions are derived from Linux brcm80211 files
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.h,
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/sdio.c and
+drivers/net/wireless/broadcom/brcm80211/include/soc.h:
+https://github.com/torvalds/linux
+Upstream commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
+Copyright (c) 2010 Broadcom Corporation
+
+The following ISC notice applies to those Linux-derived definitions only.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
+OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+AP6256/common/sdpcm.h
+SPDX-License-Identifier: ISC
+Firmware command definitions are derived from
+drivers/net/wireless/broadcom/brcm80211/brcmfmac/fwil.h in Linux:
+https://github.com/torvalds/linux
+Upstream commit: 24a19b953e2a3d0ea5a8c4951a0ab8f32720c907
+Copyright (c) 2012 Broadcom Corporation
+
+The following ISC notice applies to those Linux-derived definitions only.
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY
+SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION
+OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN
+CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+Microsoft Public License portions
+
+The following AP6256BT files retain MS-PL:
+Fdo.c, driver.c, driver.h, device.h, io.c, io.h, pdo.c, public.h, Debugdef.h.
+Copyright (c) Microsoft Corporation All Rights Reserved
+
+The Bluetooth host tests retain this attribution for extracted source fragments.
+
+SPDX-License-Identifier: MS-PL
+
+The Microsoft Public License (MS-PL)
+Copyright (c) 2015 Microsoft
+
+This license governs use of the accompanying software. If you use the software, you
+ accept this license. If you do not accept the license, do not use the software.
+
+1. Definitions
+ The terms "reproduce," "reproduction," "derivative works," and "distribution" have the
+ same meaning here as under U.S. copyright law.
+ A "contribution" is the original software, or any additions or changes to the software.
+ A "contributor" is any person that distributes its contribution under this license.
+ "Licensed patents" are a contributor's patent claims that read directly on its contribution.
+
+2. Grant of Rights
+ (A) Copyright Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free copyright license to reproduce its contribution, prepare derivative works of its contribution, and distribute its contribution or any derivative works that you create.
+ (B) Patent Grant- Subject to the terms of this license, including the license conditions and limitations in section 3, each contributor grants you a non-exclusive, worldwide, royalty-free license under its licensed patents to make, have made, use, sell, offer for sale, import, and/or otherwise dispose of its contribution in the software or derivative works of the contribution in the software.
+
+3. Conditions and Limitations
+ (A) No Trademark License- This license does not grant you rights to use any contributors' name, logo, or trademarks.
+ (B) If you bring a patent claim against any contributor over patents that you claim are infringed by the software, your patent license from such contributor to the software ends automatically.
+ (C) If you distribute any portion of the software, you must retain all copyright, patent, trademark, and attribution notices that are present in the software.
+ (D) If you distribute any portion of the software in source code form, you may do so only under this license by including a complete copy of this license with your distribution. If you distribute any portion of the software in compiled or object code form, you may only do so under a license that complies with this license.
+ (E) The software is licensed "as-is." You bear the risk of using it. The contributors give no express warranties, guarantees or conditions. You may have additional consumer rights under your local laws which this license cannot change. To the extent permitted under your local laws, the contributors exclude the implied warranties of merchantability, fitness for a particular purpose and non-infringement.

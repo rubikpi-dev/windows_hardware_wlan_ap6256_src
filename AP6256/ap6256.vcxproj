@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ARM64">
+      <Configuration>Debug</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|ARM64">
+      <Configuration>Release</Configuration>
+      <Platform>ARM64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+
+  <PropertyGroup Label="Globals">
+    <WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)'=='' and '$(Version_Number)'!=''">$(Version_Number)</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion Condition="'$(WindowsTargetPlatformVersion)'==''">10.0.18362.0</WindowsTargetPlatformVersion>
+    <Ap6256BuildVersion Condition="'$(Ap6256BuildVersion)'==''">1.0.0.0</Ap6256BuildVersion>
+    <ProjectGuid>{A6256C0F-FEE0-4256-AF62-56A9BF02D000}</ProjectGuid>
+    <RootNamespace>ap6256</RootNamespace>
+    <TargetVersion>Windows10</TargetVersion>
+    <MinimumVisualStudioVersion>14.0</MinimumVisualStudioVersion>
+    <Configuration>Release</Configuration>
+    <Platform Condition="'$(Platform)' == ''">ARM64</Platform>
+
+    <Ap6256Wdi Condition="'$(Ap6256Wdi)' == ''">true</Ap6256Wdi>
+
+    <Ap6256Model Condition="'$(Ap6256Wdi)'=='true'">wdi</Ap6256Model>
+    <Ap6256Model Condition="'$(Ap6256Wdi)'!='true'">diagnostic</Ap6256Model>
+    <Ap6256ModelInclude>$(Ap6256Model)</Ap6256ModelInclude>
+
+    <Ap6256HostCipherCandidate Condition="'$(Ap6256HostCipherCandidate)'==''">false</Ap6256HostCipherCandidate>
+    <IntDir Condition="'$(IntDir)'==''">$(ProjectDir)$(Platform)\$(Configuration)\$(Ap6256Model)\</IntDir>
+    <Inf2CatWindowsVersionList>10_19H1_ARM64</Inf2CatWindowsVersionList>
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>Driver</ConfigurationType>
+
+    <DriverType Condition="'$(Ap6256Wdi)'=='true'">WDM</DriverType>
+    <DriverType Condition="'$(Ap6256Wdi)'!='true'">KMDF</DriverType>
+    <PlatformToolset>WindowsKernelModeDriver10.0</PlatformToolset>
+
+    <UseDebugLibraries Condition="'$(Configuration)'=='Debug'">true</UseDebugLibraries>
+    <UseDebugLibraries Condition="'$(Configuration)'=='Release'">false</UseDebugLibraries>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <CodeAnalysisTreatWarningsAsErrors>true</CodeAnalysisTreatWarningsAsErrors>
+    <SpectreMitigation>false</SpectreMitigation>
+
+  </PropertyGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+
+  <PropertyGroup>
+    <Ap6256KitRoot Condition="'$(Ap6256KitRoot)'=='' and '$(WDKContentRoot)'!=''">$(WDKContentRoot)</Ap6256KitRoot>
+    <Ap6256KitVer Condition="'$(Ap6256KitVer)'==''">$(WindowsTargetPlatformVersion)</Ap6256KitVer>
+    <Ap6256KitInc>$(Ap6256KitRoot)Include\$(Ap6256KitVer)\km</Ap6256KitInc>
+    <Ap6256KitShared>$(Ap6256KitRoot)Include\$(Ap6256KitVer)\shared</Ap6256KitShared>
+    <Ap6256KitLib>$(Ap6256KitRoot)Lib\$(Ap6256KitVer)\km\$(Platform)</Ap6256KitLib>
+  </PropertyGroup>
+
+  <ItemDefinitionGroup>
+    <Link>
+      <AdditionalDependencies>cng.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ClCompile>
+
+      <ObjectFileName>$(IntDir)common\</ObjectFileName>
+      <WarningLevel>Level4</WarningLevel>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalIncludeDirectories>$(ProjectDir)$(Ap6256ModelInclude);$(ProjectDir)common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>POOL_NX_OPTIN=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Condition="'$(Configuration)'=='Debug'">
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>DBG=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+
+    <ClCompile Condition="'$(Ap6256Wdi)'!='true'">
+      <PreprocessorDefinitions>AP6256_ALLOW_STUB_NETADAPTER=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+
+    <ClCompile Condition="'$(Ap6256TraceDatapath)'=='true'">
+      <PreprocessorDefinitions>AP6256_TRACE_DATAPATH=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ClCompile Condition="'$(Ap6256HostCipherCandidate)'=='true'">
+      <PreprocessorDefinitions>AP6256_HOST_CIPHER_CANDIDATE=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+
+    <ClCompile Condition="'$(Ap6256Wdi)'=='true'">
+
+      <PreprocessorDefinitions>AP6256_ENABLE_WDI=1;NDIS_MINIPORT_DRIVER=1;NDIS_WDM=1;NDIS650_MINIPORT=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+
+      <AdditionalIncludeDirectories>$(Ap6256KitInc)\wlan\1.0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <ClCompile Condition="'$(Ap6256KitVer)'=='10.0.18362.0'">
+      <PreprocessorDefinitions>AP6256_WLAN_LEGACY_TLV=1;AP6256_WLAN_18362_TLV=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)$(Ap6256ModelInclude);$(ProjectDir)common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <ResourceCompile Condition="'$(Configuration)'=='Debug'">
+      <PreprocessorDefinitions>DBG=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <ResourceCompile Condition="'$(Ap6256Wdi)'=='true'">
+      <PreprocessorDefinitions>AP6256_ENABLE_WDI=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>sdbus.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Link Condition="'$(Ap6256Wdi)'=='true'">
+
+      <AdditionalDependencies>ndis.lib;$(Ap6256KitLib)\wlan\1.0\TLVGeneratorParser.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <Inf>
+      <SpecifyDriverVerDirectiveDate>true</SpecifyDriverVerDirectiveDate>
+      <DateStamp>*</DateStamp>
+      <SpecifyDriverVerDirectiveVersion>true</SpecifyDriverVerDirectiveVersion>
+      <TimeStamp>$(Ap6256BuildVersion)</TimeStamp>
+      <SpecifyArchitecture>true</SpecifyArchitecture>
+      <Architecture Condition="'$(Platform)'=='ARM64'">arm64</Architecture>
+    </Inf>
+  </ItemDefinitionGroup>
+
+  <ItemGroup>
+    <ResourceCompile Include="common\ap6256.rc" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ClCompile Include="common\kmdf_driver.c" Condition="'$(Ap6256Model)'!='wdi'" />
+    <ClCompile Include="common\kmdf_device.c" Condition="'$(Ap6256Model)'!='wdi'" />
+    <ClCompile Include="common\model_default.c" Condition="'$(Ap6256Model)'=='diagnostic'" />
+    <ClCompile Include="common\bcdc.c" />
+    <ClCompile Include="common\chip.c" />
+    <ClCompile Include="common\datapath.c" />
+    <ClCompile Include="common\device.c" />
+    <ClCompile Include="common\firmware.c" />
+    <ClCompile Include="common\ft.c" />
+    <ClCompile Include="common\ft_fw.c" />
+    <ClCompile Include="common\hotspot.c" />
+    <ClCompile Include="common\host_fips_wire.c" />
+    <ClCompile Include="common\host_fips.c" />
+    <ClCompile Include="common\host_cipher_frame.c" />
+    <ClCompile Include="common\host_cipher_rsn.c" />
+    <ClCompile Include="common\host_crypto_cng.c" />
+    <ClCompile Include="common\host_cipher_store.c" />
+    <ClCompile Include="common\host_cipher_keys.c" />
+    <ClCompile Include="common\host_cipher_control.c" />
+    <ClCompile Include="common\host_cipher_wire.c" />
+    <ClCompile Include="common\host_cipher_path.c" />
+    <ClCompile Include="common\host_cipher_transport.c" />
+    <ClCompile Include="common\netadapter.c">
+      <ExcludedFromBuild Condition="'$(Ap6256Model)'=='diagnostic'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="common\osal.c" />
+    <ClCompile Include="common\owe.c" />
+    <ClCompile Include="common\p2p.c" />
+    <ClCompile Include="common\service_offload_probe.c" />
+    <ClCompile Include="common\service_wire.c" />
+    <ClCompile Include="common\mbo.c" />
+    <ClCompile Include="common\ftm.c" />
+    <ClCompile Include="common\ftm_firmware.c" />
+    <ClCompile Include="common\host_cipher.c" />
+    <ClCompile Include="common\ftm_station.c" Condition="'$(Ap6256Model)'!='diagnostic'" />
+    <ClCompile Include="common\mbo_station.c" Condition="'$(Ap6256Model)'!='diagnostic'" />
+    <ClCompile Include="common\service_offload.c" Condition="'$(Ap6256Model)'!='diagnostic'" />
+    <ClCompile Include="common\pno.c" />
+    <ClCompile Include="common\pno_delay.c" />
+    <ClCompile Include="common\pno_results.c" />
+    <ClCompile Include="common\native_mgmt.c" />
+    <ClCompile Include="common\service.c" />
+    <ClCompile Include="common\ft_firmware.c" />
+    <ClCompile Include="common\owe_firmware.c" />
+    <ClCompile Include="common\sae_wdi.c" Condition="'$(Ap6256Model)'!='diagnostic'" />
+    <ClCompile Include="common\station_auth.c" Condition="'$(Ap6256Model)'!='diagnostic'" />
+    <ClCompile Include="common\auth_firmware_model.c" Condition="'$(Ap6256Model)'!='diagnostic'" />
+    <ClCompile Include="common\sae_firmware.c" />
+    <ClCompile Include="common\sae.c" />
+    <ClCompile Include="common\sae_fw.c" />
+    <ClCompile Include="common\sdbus_glue.c" />
+    <ClCompile Include="common\sdio.c" />
+    <ClCompile Include="common\tdls.c" />
+    <ClCompile Include="common\trace.c" />
+    <ClCompile Include="common\debug_settings.c" />
+    <ClCompile Include="common\tlv_memory.cpp">
+      <ExcludedFromBuild Condition="'$(Ap6256Model)'=='diagnostic'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="common\wifi_ops.c" />
+    <ClCompile Include="common\native_departure.c" />
+    <ClCompile Include="common\quality.c" />
+    <ClCompile Include="common\wlfc.c" />
+    <ClCompile Include="common\watchdog.c" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(Ap6256Model)'=='wdi'">
+    <ClCompile Include="wdi\model.c">
+      <ObjectFileName>$(IntDir)wdi\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="wdi\ndis_miniport.c">
+      <ObjectFileName>$(IntDir)wdi\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="wdi\netadapter.c">
+      <ObjectFileName>$(IntDir)wdi\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="wdi\wdi_tal.c">
+      <ObjectFileName>$(IntDir)wdi\</ObjectFileName>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Ap6256Model)'=='diagnostic'">
+    <ClCompile Include="diagnostic\model_auth.c" />
+    <ClCompile Include="diagnostic\driver.c">
+      <ObjectFileName>$(IntDir)diagnostic\</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="diagnostic\netadapter.c">
+      <ObjectFileName>$(IntDir)diagnostic\</ObjectFileName>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="common\kmdf_driver.h" />
+    <ClInclude Include="diagnostic\device_callbacks.h" />
+    <ClInclude Include="diagnostic\device_context.h" />
+    <ClInclude Include="diagnostic\device_fields.h" />
+    <ClInclude Include="diagnostic\device_framework.h" />
+    <ClInclude Include="diagnostic\firmware_image.h" />
+    <ClInclude Include="diagnostic\netmodel_api.h" />
+    <ClInclude Include="diagnostic\resource_model.h" />
+    <ClInclude Include="common\ap6256.h" />
+    <ClInclude Include="common\bcdc.h" />
+    <ClInclude Include="common\buildstamp.h" />
+    <ClInclude Include="common\chip.h" />
+    <ClInclude Include="common\chipregs.h" />
+    <ClInclude Include="common\datapath.h" />
+    <ClInclude Include="common\host_fips_wire.h" />
+    <ClInclude Include="common\host_fips.h" />
+    <ClInclude Include="common\host_cipher_frame.h" />
+    <ClInclude Include="common\host_cipher_rsn.h" />
+    <ClInclude Include="common\host_crypto_cng.h" />
+    <ClInclude Include="common\host_cipher_store.h" />
+    <ClInclude Include="common\host_cipher_keys.h" />
+    <ClInclude Include="common\host_cipher_control.h" />
+    <ClInclude Include="common\host_cipher_wire.h" />
+    <ClInclude Include="common\host_cipher_path.h" />
+    <ClInclude Include="common\host_cipher_transport.h" />
+    <ClInclude Include="common\firmware.h" />
+    <ClInclude Include="common\ft.h" />
+    <ClInclude Include="common\ft_fw.h" />
+    <ClInclude Include="common\hotspot.h" />
+    <ClInclude Include="common\hwids.h" />
+    <ClInclude Include="common\model.h" />
+    <ClInclude Include="common\netadapter.h" />
+    <ClInclude Include="common\netadapter_internal.h" />
+    <ClInclude Include="common\station_auth_state.h" />
+    <ClInclude Include="common\capability_tables.h" />
+    <ClInclude Include="common\osal.h" />
+    <ClInclude Include="common\pool.h" />
+    <ClInclude Include="common\watchdog.h" />
+    <ClInclude Include="common\owe.h" />
+    <ClInclude Include="common\p2p.h" />
+    <ClInclude Include="common\pno.h" />
+    <ClInclude Include="common\pno_delay.h" />
+    <ClInclude Include="common\pno_delay_patch.h" />
+    <ClInclude Include="common\public.h" />
+    <ClInclude Include="common\ft_firmware.h" />
+    <ClInclude Include="common\native_mgmt.h" />
+    <ClInclude Include="common\native_mgmt_patch.h" />
+    <ClInclude Include="common\native_rrm_patch.h" />
+    <ClInclude Include="common\owe_firmware.h" />
+    <ClInclude Include="common\sae_firmware.h" />
+    <ClInclude Include="common\sae_patch.h" />
+    <ClInclude Include="common\sae.h" />
+    <ClInclude Include="common\sae_fw.h" />
+    <ClInclude Include="common\sdio.h" />
+    <ClInclude Include="common\sdpcm.h" />
+    <ClInclude Include="common\tdls.h" />
+    <ClInclude Include="common\trace.h" />
+    <ClInclude Include="common\version.h" />
+    <ClInclude Include="common\wifi_ops.h" />
+    <ClInclude Include="common\association_failure.h" />
+    <ClInclude Include="common\native_departure.h" />
+    <ClInclude Include="common\native_departure_patch.h" />
+    <ClInclude Include="common\wlfc.h" />
+    <ClInclude Include="wdi\device_callbacks.h" />
+    <ClInclude Include="wdi\device_context.h" />
+    <ClInclude Include="wdi\device_fields.h" />
+    <ClInclude Include="wdi\device_framework.h" />
+    <ClInclude Include="wdi\firmware_image.h" />
+    <ClInclude Include="wdi\netmodel.h" />
+    <ClInclude Include="wdi\netmodel_api.h" />
+    <ClInclude Include="wdi\netmodel_state.h" />
+    <ClInclude Include="common\ft_patch.h" />
+    <ClInclude Include="common\owe_patch.h" />
+    <ClInclude Include="common\service.h" />
+    <ClInclude Include="common\service_patch.h" />
+    <ClInclude Include="common\service_offload.h" />
+    <ClInclude Include="common\service_wire.h" />
+    <ClInclude Include="common\mbo.h" />
+    <ClInclude Include="common\ftm.h" />
+    <ClInclude Include="common\ftm_firmware.h" />
+    <ClInclude Include="common\ftm_patch.h" />
+    <ClInclude Include="common\host_cipher.h" />
+    <ClInclude Include="common\host_cipher_patch.h" />
+    <ClInclude Include="common\host_cipher_image.h" />
+    <ClInclude Include="wdi\resource_model.h" />
+    <ClInclude Include="common\sae_wdi.h" />
+    <ClInclude Include="common\sae_station.inc" />
+    <ClInclude Include="common\ft_station.inc" />
+    <ClInclude Include="wdi\wdi_tal.h" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Inf Include="ap6256.inx" />
+  </ItemGroup>
+
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+
+  <Target Name="Ap6256ValidateModel" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(Ap6256HostCipherCandidate)'!='true' and '$(Ap6256HostCipherCandidate)'!='false'"
+           Text="Ap6256HostCipherCandidate must be true or false." />
+    <Error Condition="'$(Ap6256Model)'!='wdi' and '$(Ap6256Model)'!='diagnostic'" Text="Unknown AP6256 model selection." />
+    <Error Condition="'$(Ap6256Model)'=='wdi' and '$(Ap6256Wdi)'!='true'" Text="WDI sources require Ap6256Wdi=true." />
+    <Error Condition="'$(Ap6256Model)'=='diagnostic' and '$(Ap6256Wdi)'=='true'" Text="Diagnostic sources require Ap6256Wdi=false." />
+  </Target>
+
+  <Target Name="Ap6256RejectRetiredFtOptions" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(Ap6256HostManagement)'!='' or '$(Ap6256NativeRrm)'!='' or '$(Ap6256NativeMgmt)'!=''"
+      Text="Legacy management build switches are retired. Native firmware management is mandatory for exact images." />
+    <Error Condition="'$(Ap6256HostFt)'=='true' or '$(Ap6256AuthCapture)'=='true' or '$(Ap6256FtRomProbe)'=='true' or '$(Ap6256RomFull)'=='true'"
+           Text="Unsupported build configuration." />
+  </Target>
+
+
+  <Target Name="Ap6256StageDriverBinary" AfterTargets="DriverPackageTarget" BeforeTargets="Inf2Cat" Condition="'$(Ap6256PackageFirmware)'=='true'">
+    <Error Condition="'$(Ap6256FirmwareRoot)'==''" Text="Set Ap6256FirmwareRoot to an external firmware directory." />
+    <MakeDir Directories="$(OutDir)$(TargetName)\" />
+    <Copy SourceFiles="$(TargetPath)" DestinationFolder="$(OutDir)$(TargetName)\" SkipUnchangedFiles="false" />
+    <Copy SourceFiles="$(Ap6256FirmwareRoot)\4345r9rtecdc.bin;$(Ap6256FirmwareRoot)\4345r9nvram.txt;$(Ap6256FirmwareRoot)\4345r9.clmb" DestinationFolder="$(OutDir)$(TargetName)\" SkipUnchangedFiles="false" />
+  </Target>
+  <ItemDefinitionGroup Condition="'$(Ap6256UseBuildVersion)'=='true'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(Ap6256BuildMetadataDirectory);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>AP6256_BUILD_VERSION_GENERATED=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(Ap6256BuildMetadataDirectory);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>AP6256_BUILD_VERSION_GENERATED=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+</Project>

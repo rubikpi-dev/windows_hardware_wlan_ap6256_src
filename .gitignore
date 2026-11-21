@@ -1,0 +1,8 @@
+.vs/
+bin/
+__pycache__/
+.vscode/
+ARM64/
+Debug/
+Release/
+
